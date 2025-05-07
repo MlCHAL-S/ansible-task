@@ -1,0 +1,12 @@
+# deploy-app.yml
+
+- name: Run pet-clinic Docker container from Artifact Registry
+  hosts: webserver
+  become: true
+  collections:
+    - community.Docker
+
+  tasks:
+    - name: Authenticate Docker to Artifact Registry
+      shell: |
+        gcloud auth configure-docker us-central1-docker.pkg.dev

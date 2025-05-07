@@ -1,0 +1,1 @@
+ssh-keygen -t ed25519 -C "gpc-user@gpc-instance", name it gpc_ssh_key
