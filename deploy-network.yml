@@ -1,0 +1,11 @@
+# deploy-network.yml
+
+---
+- name: Deploy Petclinic network
+  hosts: server
+  become: true
+  tasks:
+    - name: Create Docker network
+      community.docker.docker_network:
+        name: petclinic-network
+        state: present

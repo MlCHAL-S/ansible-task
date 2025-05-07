@@ -1,0 +1,28 @@
+# deploy-pet-clinic.yml
+
+---
+- name: Deploy pet clinic
+  hosts: server
+  become: true
+  vars:
+    project: "playground-s-11-0b191ba6"
+    image: "us-central1-docker.pkg.dev/{{ project }}/pet-clinic-repo/pet-clinic-image:latest"
+  tasks:
+    - name: Pull pet clinic
+      community.docker.docker_image_pull:
+        name: "{{ image }}"
+
+    - name: Run pet clinic
+      community.docker.docker_container:
+        name: petclinic-container
+        image: "{{ image }}"
+        state: started
+        ports:
+          - "80:8080"
+        env:
+          SPRING_PROFILES_ACTIVE: postgres
+          SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/petclinic
+          SPRING_DATASOURCE_USERNAME: petclinic
+          SPRING_DATASOURCE_PASSWORD: petclinic
+        networks:
+          - name: petclinic-network

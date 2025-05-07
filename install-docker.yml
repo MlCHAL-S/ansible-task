@@ -1,0 +1,27 @@
+# install-docker.yml
+
+- name: Install Docker on Remote Server
+  hosts: server
+  become: true
+  tasks:
+    - name: Update APT package index
+      apt:
+        update_cache: yes
+
+    - name: Download Docker convenience script
+      get_url:
+        url: https://get.docker.com
+        dest: /tmp/get-docker.sh
+        mode: '0755'
+
+    - name: Run Docker script
+      shell: sh /tmp/get-docker.sh
+
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Authenticate Docker
+      shell: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet

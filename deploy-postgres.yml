@@ -1,0 +1,23 @@
+# deploy-postgres.yml
+
+---
+  - hosts: server
+    become: true
+    tasks:
+      - name: Pull Postgres 17
+        community.docker.docker_image_pull:
+          name: postgres:17
+
+      - name: Run Postgres 17
+        community.docker.docker_container:
+          name: postgres
+          image: postgres:17
+          state: started
+          ports:
+            - "5432:5432"
+          env:
+            POSTGRES_USER: petclinic
+            POSTGRES_PASSWORD: petclinic
+            POSTGRES_DB: petclinic
+          networks:
+            - name: petclinic-network
